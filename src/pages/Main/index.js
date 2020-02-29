@@ -34,7 +34,7 @@ export default class Main extends Component {
 
     this.setState({ loading: true });
     const { newRepo, repositories } = this.state;
-    const response = await api.get(`/repos/${newRepo}`);
+    const response = await api.get(`/repos/${newRepo}`).catch();
 
     const data = {
       name: response.data.full_name,
