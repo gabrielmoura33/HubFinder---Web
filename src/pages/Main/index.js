@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { Form, SubmitButton, List, Input } from './styles';
+import { toast } from 'react-toastify';
+import { Form, SubmitButton, List, Input, Empty } from './styles';
 import Container from '../../components/Container';
 import api from '../../services/api';
 
@@ -12,13 +13,14 @@ export default class Main extends Component {
     repositories: [],
     loading: false,
     error: false,
+    empty: true,
   };
 
   componentDidMount() {
     const repositories = localStorage.getItem('repositories');
 
     if (repositories) {
-      this.setState({ repositories: JSON.parse(repositories) });
+      this.setState({ repositories: JSON.parse(repositories), empty: false });
     }
   }
 
@@ -49,8 +51,10 @@ export default class Main extends Component {
         newRepo: '',
         loading: false,
         error: false,
+        empty: false,
       });
     } catch (err) {
+      toast.error('Repositorio do GitHub Não Encontrado, verifique a URL');
       this.setState({ loading: false, error: true });
     }
   };
@@ -60,7 +64,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { newRepo, loading, repositories, error } = this.state;
+    const { newRepo, loading, repositories, error, empty } = this.state;
     return (
       <Container>
         <h1>
@@ -85,17 +89,27 @@ export default class Main extends Component {
             )}
           </SubmitButton>
         </Form>
-        <List>
-          {repositories.map(repository => (
-            <li key={repository.name}>
-              <span>{repository.name}</span>
-              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
-                {' '}
-                Detalhes
-              </Link>
-            </li>
-          ))}
-        </List>
+        {empty ? (
+          <Empty>
+            <p>
+              Para Adicionar um repositorio digite:
+              usuarioGitHub/nomeDoRepositorio e clique em detalhes para
+              localizar sua lista de Issues
+            </p>
+          </Empty>
+        ) : (
+          <List>
+            {repositories.map(repository => (
+              <li key={repository.name}>
+                <span>{repository.name}</span>
+                <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
+                  {' '}
+                  Detalhes
+                </Link>
+              </li>
+            ))}
+          </List>
+        )}
       </Container>
     );
   }

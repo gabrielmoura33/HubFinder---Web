@@ -80,3 +80,13 @@ export const Input = styled.input.attrs(props => ({
       border-color: #ff0000;
     `};
 `;
+
+export const Empty = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  p {
+    color: #666;
+    text-align: justify;
+    opacity: 0.7;
+  }
+`;
