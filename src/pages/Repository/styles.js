@@ -66,7 +66,7 @@ export const IssueList = styled.ul`
           color: #333;
 
           &:hover {
-            color: #7159c1;
+            color: #63afa2;
           }
         }
 
